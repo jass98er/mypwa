@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#317EFB"/>
+    <title>Document</title>
+    <link rel="stylesheet" href="./main.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <header>
+        <span class="header_title">PWA</span>
+    </header>
+    <div class="card">
+        <img src="./icon.png" alt="Profile Pic">
+        <p class="card_tile">ABC</p>
+        <p class="card_desc">DEF</p>
+    </div>
+    <button id="a">button</button>
+    <script>
+    if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('./sw.js')
+    .then(res=>{
+        console.info('SW registered')
+        
+    })
+    .catch(err=>{
+        console.error('Error in registertation')
+    })
+}else{
+    console.log('sw is not supported');
+}
+    Notification.requestPermission(function(status){
+        console.log('permission allowed')
+    })
+    var button = document.getElementById('a');
+    button.onclick = function(){
+        displayNot();
+    }
+
+    function displayNot(){
+        if(Notification.permission==='granted'){
+            navigator.serviceWorker.getRegistration()
+            .then(function(reg){
+                var options = {
+        body: 'Here is a notification body!',
+        icon: 'images/icons/icon-72x72.png',
+        vibrate: [100, 50, 100],
+        data: {
+          dateOfArrival: Date.now(),
+          primaryKey: 1
+        }
+      };
+      console.log('working');
+                reg.showNotification('hey',options)
+            })
+        }
+    }
+    </script>
+
+</body>
+</html>
